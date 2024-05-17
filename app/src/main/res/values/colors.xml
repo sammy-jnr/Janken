@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="very_dark_blue">#000027</color>
+    <color name="white_blue">#E5E5FF</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="light_grey">#C1C1C1</color>
+    <color name="chip_yellow">#C19500</color>
+    <color name="dark_blue">#03045e</color>
+    <color name="light_blue">#0B0C8E</color>
+    <color name="chip_blue">#023e8a</color>
+    <color name="chip_red">#C81534</color>
+    <color name="chip_purple">#643AB1</color>
+    <color name="chip_light_blue">#45B4C8</color>
+</resources>

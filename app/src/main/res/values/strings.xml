@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Jan ken</string>
+    <string name="new_game_text">New Game</string>
+    <string name="vs_text">Vs</string>
+    <string name="computer_text">Computer</string>
+    <string name="human_text">Human</string>
+    <string name="mode_text">Mode</string>
+    <string name="no_of_games_text">No of games</string>
+    <string name="continue_text">Continue</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="scan_icon_text">scan_icon</string>
+    <string name="human_icon_text">human_icon</string>
+    <string name="computer_icon_text">computer_icon</string>
+    <string name="rps_text">RPS</string>
+    <string name="rpsls_text">RPSLS</string>
+    <string name="_1_text">1</string>
+    <string name="backward_arrow_text">backward_arrow</string>
+    <string name="forward_arrow_text">forward_arrow</string>
+</resources>
