@@ -14,29 +14,22 @@ import android.widget.ImageView;
 import com.onrender.umehwisdom.janken.R;
 
 
-public class ShareChallengeFragment extends Fragment {
+public class GameInfoFragment extends Fragment {
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_share_challenge, container, false);
+        return inflater.inflate(R.layout.fragment_game_info, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ImageView shareBackButton = view.findViewById(R.id.share_back_button);
-        ImageView copyButton = view.findViewById(R.id.copy_button);
-
-        shareBackButton.setOnClickListener(v->{
+        view.findViewById(R.id.info_back_button).setOnClickListener(v->{
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-        });
-
-
-        copyButton.setOnClickListener(v->{
-
         });
 
     }

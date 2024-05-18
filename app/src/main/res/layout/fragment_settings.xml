@@ -14,7 +14,7 @@
         android:id="@+id/vs_computer_button"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/options_background_unselected"
+        android:background="@drawable/options_background_selected"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/options_background_selected"
+        android:background="@drawable/options_background_unselected"
         app:layout_constraintTop_toBottomOf="@+id/vs_computer_button"
         tools:layout_editor_absoluteX="20dp">
 
@@ -262,7 +262,7 @@
         android:textColor="@color/dark_blue"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:id="@+id/go_to_share_page_button"
+        android:id="@+id/proceed_to_game"
         />
 
 

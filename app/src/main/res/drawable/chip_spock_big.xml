@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item  android:width="70dp" android:height="70dp">
+    <item  android:width="120dp" android:height="120dp">
         <shape android:shape="oval">
             <solid android:color="@color/chip_light_blue"/>
         </shape>
     </item>
-    <item android:width="55dp" android:height="55dp" android:gravity="center">
+    <item android:width="90dp" android:height="90dp" android:gravity="center">
         <shape android:shape="oval">
             <solid android:color="@color/white"/>
         </shape>
     </item>
-    <item android:width="25dp" android:height="31dp" android:gravity="center"
+    <item android:width="45dp" android:height="55dp" android:gravity="center"
         android:drawable="@drawable/spock_icon"
         />
 </layer-list>
