@@ -33,4 +33,9 @@
     <string name="you_lose_text">You  Lose</string>
     <string name="draw_text">Draw</string>
     <string name="play_again_text">Play again</string>
+    <string name="cancel_text">Cancel</string>
+    <string name="searching">Searching . . .</string>
+    <string name="profile_text">profile_text</string>
+    <string name="username">Username</string>
+    <string name="save">Save</string>
 </resources>

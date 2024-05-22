@@ -2,24 +2,36 @@ package com.onrender.umehwisdom.janken.models;
 
 import androidx.lifecycle.ViewModel;
 
+import com.onrender.umehwisdom.janken.interfaces.Game;
+
 import java.util.Arrays;
 import java.util.Random;
 
 public class SharedViewModel extends ViewModel {
+
+    private String username;
     private String gameMode = "RPS";
 
     private int numberOfGames = 1;
 
     private String opponent = "computer";
 
-    private CurrentGame currentGame;
+    private Game currentGame;
 
-    public CurrentGame getCurrentGame() {
+    public Game getCurrentGame() {
         return currentGame;
     }
 
-    public void setCurrentGame(CurrentGame currentGame) {
+    public void setCurrentGame(Game currentGame) {
         this.currentGame = currentGame;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getGameMode() {
@@ -41,7 +53,6 @@ public class SharedViewModel extends ViewModel {
     public String getOpponent() {
         return opponent;
     }
-
     public void setOpponent(String opponent) {
         this.opponent = opponent;
     }

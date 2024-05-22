@@ -7,6 +7,7 @@
     android:background="@drawable/background_linear_gradient"
     android:paddingTop="60dp"
     android:paddingHorizontal="20dp"
+    android:id="@+id/play_game_container"
     >
 
     <TextView
@@ -65,27 +66,30 @@
         tools:layout_editor_absoluteX="20dp">
 
         <TextView
-            android:id="@+id/textView7"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="01:00"
-            android:textColor="@color/light_grey"
-            android:textSize="23sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.5" />
-
-        <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/display_points"
             android:fontFamily="@font/poppins_bold"
             android:gravity="center"
-            android:text="Points:  0"
+            android:text="You:  0"
             android:textColor="@color/light_grey"
-            android:textSize="23sp"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.5" />
+        <TextView
+            android:layout_width="0dp"
+            android:id="@+id/display_opponents_points"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="opponent:  0"
+            android:fontFamily="@font/poppins_bold"
+
+            android:textColor="@color/light_grey"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintWidth_percent="0.5" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

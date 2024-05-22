@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.PlayFragment"
+    android:background="@drawable/background_linear_gradient"
     >
 
     <include layout="@layout/play_fragment_sub_layout_1" />

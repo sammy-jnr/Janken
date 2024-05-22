@@ -70,6 +70,7 @@
     <ImageView
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:id="@+id/display_qr_code"
         android:contentDescription="@string/qr_image_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
