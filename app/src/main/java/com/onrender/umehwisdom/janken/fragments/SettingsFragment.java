@@ -1,5 +1,6 @@
 package com.onrender.umehwisdom.janken.fragments;
 
+import android.health.connect.datatypes.units.Length;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,12 +23,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.onrender.umehwisdom.janken.R;
 import com.onrender.umehwisdom.janken.firebase.FirebaseDB;
 import com.onrender.umehwisdom.janken.interfaces.Game;
 import com.onrender.umehwisdom.janken.models.Multiplayer;
 import com.onrender.umehwisdom.janken.models.SinglePlayer;
 import com.onrender.umehwisdom.janken.models.SharedViewModel;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 
 public class SettingsFragment extends Fragment {
@@ -52,8 +59,12 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
+        sharedViewModel.setGameMode("RPS");
+        sharedViewModel.setNumberOfGames(1);
+        sharedViewModel.setOpponent("computer");
 
         vsComputerButton  = view.findViewById(R.id.vs_computer_button);
         vsHumanButton  = view.findViewById(R.id.vs_human_button);
@@ -136,74 +147,61 @@ public class SettingsFragment extends Fragment {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GameInfoFragment()).addToBackStack("info").commit();
         });
 
-//        setDetailsToLastGame();
-
-
 
         // continue button is clicked, decide what page to go
         view.findViewById(R.id.proceed_to_game).setOnClickListener(v->{
             Game currentGame;
             if(sharedViewModel.getOpponent().equals("human")){
+                if(sharedViewModel.getUsername() == null) {
+                    handleNoUsername();
+                    return;
+                }
                 currentGame = new Multiplayer(sharedViewModel.getGameMode(),sharedViewModel.getNumberOfGames(),sharedViewModel.getUsername());
                 sharedViewModel.setCurrentGame(currentGame);
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShareChallengeFragment()).addToBackStack("share").commit();
             }else{
                 currentGame = new SinglePlayer(sharedViewModel.getGameMode(),sharedViewModel.getNumberOfGames());
                 sharedViewModel.setCurrentGame(currentGame);
-                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlayFragment()).addToBackStack("game").commit();
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlayFragment()).commit();
             }
 
         });
     }
+    private void handleNoUsername(){
+        ConstraintLayout settingsUsernamePopup = requireActivity().findViewById(R.id.settings_username_popup);
+        TextInputEditText settingsUsername = requireActivity().findViewById(R.id.settings_username);
+        MaterialButton settingsUsernameSaveButton = requireActivity().findViewById(R.id.settings_username_save_button);
 
-    private void setDetailsToLastGame(){
-        if(sharedViewModel.getCurrentGame()==null){
-            Toast.makeText(requireActivity(), " null current game", Toast.LENGTH_SHORT).show();
-            return;
-        };
+        settingsUsernamePopup.startAnimation(AnimationUtils.loadAnimation(requireContext(),R.anim.slide_up));
 
-        // opponent
-        vsHumanButton.setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.options_background_unselected));
-        vsComputerButton.setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.options_background_unselected));
-        if(sharedViewModel.getCurrentGame().getType().equals("singleplayer")){
-            sharedViewModel.setOpponent("computer");
-            vsComputerButton.setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.options_background_selected));
-        }else{
-            sharedViewModel.setOpponent("human");
-            vsHumanButton.setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.options_background_selected));
-        }
+        settingsUsernameSaveButton.setOnClickListener(v -> {
+            String username = settingsUsername.getText().toString().trim();
+            if(username.isEmpty()){
+                Toast.makeText(requireContext(),"Username cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(username.length() > 16){
+                Toast.makeText(requireContext(),"Username is too long", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            File file = new File(requireActivity().getFilesDir(),"username.txt");
 
-        //
+            try {
+                FileOutputStream writer = new FileOutputStream(file);
+                writer.write(username.getBytes());
+                writer.close();
+                Toast.makeText(requireContext(),"saved",Toast.LENGTH_SHORT).show();
+                settingsUsernamePopup.startAnimation(AnimationUtils.loadAnimation(requireContext(),R.anim.slide_down));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
-        if(sharedViewModel.getCurrentGame().getMode().equals("RPS")){
-            sharedViewModel.setGameMode("RPS");
-            rpsButton.setTextColor(ContextCompat.getColor(requireContext(),R.color.very_dark_blue));
-            rpslsButton.setTextColor(ContextCompat.getColor(requireContext(),R.color.light_grey));
-//            ViewGroup.LayoutParams params = selectedBackground.getLayoutParams();
-//            ((ViewGroup.MarginLayoutParams) params).leftMargin = (20);
-        }else{
-            sharedViewModel.setGameMode("RPSLS");
-            rpsButton.setTextColor(ContextCompat.getColor(requireContext(),R.color.light_grey));
-            rpslsButton.setTextColor(ContextCompat.getColor(requireContext(),R.color.very_dark_blue));
-//            ViewGroup.LayoutParams params = selectedBackground.getLayoutParams();
-//            ((ViewGroup.MarginLayoutParams) params).leftMargin = ((getResources().getDisplayMetrics().widthPixels/2)-50);
-        }
 
-        //
-        displayNumberOfGames.setText(String.valueOf(sharedViewModel.getCurrentGame().getNoOfGames()));
-        if(sharedViewModel.getCurrentGame().getNoOfGames() == 9) {
-            numberOfGamesForwardButton.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.forward_arrow_grey));
-            numberOfGamesBackButton.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.backward_arrow));
-        } else if (sharedViewModel.getCurrentGame().getNoOfGames() == 1) {
-            numberOfGamesForwardButton.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.forward_arrow));
-            numberOfGamesBackButton.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.backward_arrow_grey));
-        } else{
-            numberOfGamesForwardButton.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.forward_arrow));
-            numberOfGamesBackButton.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.backward_arrow));
-        }
+        });
 
 
 
 
     }
+
 }

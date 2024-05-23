@@ -81,7 +81,7 @@
             android:id="@+id/display_opponents_points"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="opponent:  0"
+            android:text="Computer:  0"
             android:fontFamily="@font/poppins_bold"
 
             android:textColor="@color/light_grey"
@@ -99,7 +99,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout4">
 
 
         <include layout="@layout/_2_chips_layout" />
@@ -123,16 +123,16 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
+            android:id="@+id/display_verdict"
             android:layout_width="wrap_content"
             android:layout_height="130dp"
             android:drawablePadding="20dp"
-            android:id="@+id/display_verdict"
             android:fontFamily="@font/poppins_bold"
             android:gravity="center"
             android:text="@string/you_win_text"
             android:textColor="@color/white"
-            android:visibility="gone"
             android:textSize="50sp"
+            android:visibility="gone"
             app:drawableEndCompat="@drawable/happy_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -141,20 +141,41 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/play_again_container"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="@string/play_again_text"
-        android:id="@+id/play_again_button"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:fontFamily="@font/poppins_medium"
-        android:background="@drawable/br30"
-        android:backgroundTint="@color/very_dark_blue"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
         android:visibility="gone"
-        tools:layout_editor_absoluteX="20dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7"
+        tools:layout_editor_absoluteX="20dp">
+
+        <Button
+            android:id="@+id/play_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_light_grey"
+            android:text="@string/back"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/zxing_transparent" />
+
+        <TextView
+            android:id="@+id/play_again_button"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/br_5"
+            android:backgroundTint="@color/somewhat_dark_blue"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="@string/play_again_text"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout7"
+            tools:layout_editor_absoluteX="20dp" />
+    </LinearLayout>
+
 
 
 

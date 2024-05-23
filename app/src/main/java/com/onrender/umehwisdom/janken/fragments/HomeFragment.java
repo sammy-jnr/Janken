@@ -47,7 +47,6 @@ public class HomeFragment extends Fragment {
 
         firebaseDB = FirebaseDB.getInstance();
 
-
         MaterialButton newGameButton = view.findViewById(R.id.new_game_button);
         ImageView scanButton = view.findViewById(R.id.home_scan_button);
         ConstraintLayout homeLayout1 = view.findViewById(R.id.home_layout1);
@@ -56,9 +55,9 @@ public class HomeFragment extends Fragment {
 
 
         scanButton.setOnClickListener(v->{
-            homeLayout1.setVisibility(View.GONE);
-            homeLayout2.setVisibility(View.VISIBLE);
+//            homeLayout1.setVisibility(View.GONE);
             scan();
+//            homeLayout2.setVisibility(View.VISIBLE);
         });
 
         view.findViewById(R.id.home_profile_button).setOnClickListener(v->{
@@ -67,15 +66,12 @@ public class HomeFragment extends Fragment {
         });
 
 
-        //save username
-
         view.findViewById(R.id.profile_back_button).setOnClickListener(v->{
             homeLayout3.setVisibility(View.GONE);
             homeLayout1.setVisibility(View.VISIBLE);
         });
 
         TextInputEditText profileUsername = view.findViewById(R.id.profile_username);
-
 
         SharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
@@ -86,6 +82,14 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.save_username_button).setOnClickListener(v->{
             File file = new File(requireContext().getFilesDir(), "username.txt");
             String username = profileUsername.getText().toString().trim();
+            if(username.isEmpty()){
+                Toast.makeText(requireContext(),"Username cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(username.length() > 16){
+                Toast.makeText(requireContext(),"Username is too long", Toast.LENGTH_SHORT).show();
+                return;
+            }
             try {
                 FileOutputStream writer = new FileOutputStream(file);
                 writer.write(username.getBytes());
@@ -95,12 +99,6 @@ public class HomeFragment extends Fragment {
                 e.printStackTrace();
             }
         });
-
-
-
-
-
-
 
         newGameButton.setOnClickListener(v->{
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack("settings").commit();
@@ -123,8 +121,6 @@ public class HomeFragment extends Fragment {
             SharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
             firebaseDB.joinGame(result.getContents(),sharedViewModel.getUsername());
-
-
             MutableLiveData<Boolean> isAccepted = firebaseDB.getGameAccepted();
             isAccepted.observe(requireActivity(), aBoolean -> {
                 if (aBoolean){
@@ -136,6 +132,7 @@ public class HomeFragment extends Fragment {
             Toast.makeText(requireContext(), "Failed to load", Toast.LENGTH_LONG).show();
         }
     });
+
 
 
 }

@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedViewModel sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("games");
 
@@ -41,17 +40,10 @@ public class MainActivity extends AppCompatActivity {
                 Scanner usernameScanner = new Scanner(usernamePath);
                 sharedViewModel.setUsername(usernameScanner.nextLine());
                 usernameScanner.close();
-            }}catch(Exception e){
-                e.printStackTrace();
             }
-
-
-
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack("home").commit();
-
-
-
-
-
     }
 }

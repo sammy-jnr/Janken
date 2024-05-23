@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,7 @@ import com.onrender.umehwisdom.janken.R;
 import com.onrender.umehwisdom.janken.firebase.FirebaseDB;
 import com.onrender.umehwisdom.janken.models.Multiplayer;
 import com.onrender.umehwisdom.janken.models.SharedViewModel;
-
+import com.onrender.umehwisdom.janken.models.SinglePlayer;
 
 
 public class PlayFragment extends Fragment {
@@ -135,6 +136,7 @@ public class PlayFragment extends Fragment {
                 _2ChipsLayout.setVisibility(View.GONE);
                 nextRoundButton.setVisibility(View.GONE);
                 opponentOptionDisplay.setVisibility(View.GONE);
+                sharedViewModel.getCurrentGame().increaseRound();
                 displayGamesPlayed.setText(new StringBuilder(sharedViewModel.getCurrentGame().getRound() + "/" + sharedViewModel.getCurrentGame().getNoOfGames()));
                 if(sharedViewModel.getCurrentGame().getMode().equals("RPS")){
                     _3ChipsLayout.setVisibility(View.VISIBLE);
@@ -144,6 +146,10 @@ public class PlayFragment extends Fragment {
             }else{
                 multiplayerNextRound();
             }
+        });
+
+        view.findViewById(R.id.play_back_button).setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         });
 
 
@@ -376,6 +382,7 @@ public class PlayFragment extends Fragment {
 
         TextView displayVerdict = requireActivity().findViewById(R.id.display_verdict);
         TextView playAgainButton = requireActivity().findViewById(R.id.play_again_button);
+        LinearLayout playAgainContainer = requireActivity().findViewById(R.id.play_again_container);
 
         Multiplayer currentGame = (Multiplayer) sharedViewModel.getCurrentGame();
 
@@ -404,9 +411,11 @@ public class PlayFragment extends Fragment {
         }
 
         displayVerdict.setVisibility(View.VISIBLE);
-        playAgainButton.setVisibility(View.VISIBLE);
+        playAgainContainer.setVisibility(View.VISIBLE);
+
+
         playAgainButton.setOnClickListener(v->{
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack("settings").commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         });
     }
     private void multiplayerNextRound() {
@@ -435,47 +444,26 @@ public class PlayFragment extends Fragment {
         String verdict = sharedViewModel.determineWinner(yourChoice, computerChoice);
 
         (new Handler()).postDelayed(() -> {
-            sharedViewModel.getCurrentGame().increaseRound();
+
             if (verdict.equals("won")){
                 sharedViewModel.getCurrentGame().increasePoints();
             } else if (verdict.equals("lost")) {
                 sharedViewModel.getCurrentGame().increaseOpponentPoints();
             }
+            setBackgroundOpponentOption(computerChoice);
 
-            switch (computerChoice) {
-                case "rock":
-                    opponentOptionDisplay.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.chip_rock_big));
-                    break;
-                case "paper":
-                    opponentOptionDisplay.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.chip_paper_big));
-                    break;
-                case "scissors":
-                    opponentOptionDisplay.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.chip_scissors_big));
-                    break;
-                case "lizard":
-                    opponentOptionDisplay.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.chip_lizard_big));
-                    break;
-                case "spock":
-                    opponentOptionDisplay.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.chip_spock_big));
-                    break;
-            }
-            opponentOptionDisplay.setVisibility(View.VISIBLE);
-            if(sharedViewModel.getCurrentGame().getRound() == sharedViewModel.getCurrentGame().getNoOfGames()){
+            if(sharedViewModel.getCurrentGame().getRound() >= sharedViewModel.getCurrentGame().getNoOfGames()){
                 gameOver();
             }else{
-                // if the user wins without getting to the last rounds
-//                boolean forcedLose =
-//                        (sharedViewModel.getCurrentGame().getNoOfGames() - sharedViewModel.getCurrentGame().getRound() + sharedViewModel.getCurrentGame().getPoints())
-//                        < ((float)(sharedViewModel.getCurrentGame().getNoOfGames() - sharedViewModel.getCurrentGame().getDrawCount()) /2);
-                if(sharedViewModel.getCurrentGame().getPoints() > sharedViewModel.getCurrentGame().getNoOfGames()/2){
-                    displayPoints.setText(new StringBuilder("Points: " +  sharedViewModel.getCurrentGame().getPoints()));
-                    gameOver();
-                    return;
-                }
-
+//                if(sharedViewModel.getCurrentGame().getPoints() > sharedViewModel.getCurrentGame().getNoOfGames()/2){
+//                    displayPoints.setText(new StringBuilder("Points: " +  sharedViewModel.getCurrentGame().getPoints()));
+//                    gameOver();
+//                    return;
+//                }
 
                 nextRoundButton.setVisibility(View.VISIBLE);
-                displayPoints.setText(new StringBuilder("Points: " +  sharedViewModel.getCurrentGame().getPoints()));
+                displayPoints.setText(new StringBuilder("You: " +  sharedViewModel.getCurrentGame().getPoints()));
+                displayOpponentsPoints.setText(new StringBuilder("Computer: " +  sharedViewModel.getCurrentGame().getOpponentPoints()));
             }
         },1000);
 
@@ -486,6 +474,8 @@ public class PlayFragment extends Fragment {
     private void gameOver(){
         TextView displayVerdict = requireActivity().findViewById(R.id.display_verdict);
         TextView playAgainButton = requireActivity().findViewById(R.id.play_again_button);
+        LinearLayout playAgainContainer = requireActivity().findViewById(R.id.play_again_container);
+
 
         if(sharedViewModel.getCurrentGame().getPoints() > sharedViewModel.getCurrentGame().getOpponentPoints()){
             displayVerdict.setText(getResources().getString(R.string.you_win_text));
@@ -498,11 +488,15 @@ public class PlayFragment extends Fragment {
             displayVerdict.setCompoundDrawablesRelative(null,null,ContextCompat.getDrawable(requireContext(),R.drawable.sad2_icon),null);
         }
 
+        displayPoints.setText(new StringBuilder("You: " +  sharedViewModel.getCurrentGame().getPoints()));
+        displayOpponentsPoints.setText(new StringBuilder("Computer: " +  sharedViewModel.getCurrentGame().getOpponentPoints()));
+        displayGamesPlayed.setText(new StringBuilder(sharedViewModel.getCurrentGame().getRound() + "/" + sharedViewModel.getCurrentGame().getNoOfGames()));
         displayVerdict.setVisibility(View.VISIBLE);
-        playAgainButton.setVisibility(View.VISIBLE);
+        playAgainContainer.setVisibility(View.VISIBLE);
 
         playAgainButton.setOnClickListener(v->{
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack("settings").commit();
+            sharedViewModel.setCurrentGame(new SinglePlayer(sharedViewModel.getGameMode(),sharedViewModel.getNumberOfGames()));
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlayFragment()).commit();
         });
     }
 
